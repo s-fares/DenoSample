@@ -1,8 +1,9 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "dev": "deno run --allow-net --watch main.ts"
   },
   "imports": {
+    "hono/": "https://deno.land/x/hono@v3.3.1/",
     "@std/assert": "jsr:@std/assert@1"
   }
 }
