@@ -1,16 +1,30 @@
 import { Hono } from "https://deno.land/x/hono@v3.3.1/mod.ts";
-import { serve } from "https://deno.land/std@0.171.0/http/server.ts"; // Import Deno's serve function
+import { serve } from "https://deno.land/std@0.171.0/http/server.ts";
 
 const app = new Hono();
 
-app.get('/', (c) => {
-  return c.text('Hello, Hono with Deno!');
+// Serve the index page
+app.get('/', async (c) => {
+    try {
+        const html = await Deno.readTextFile('./web/index.html');
+        return c.html(html);
+    } catch (error) {
+        console.error("Error reading index.html:", error);
+        return c.text("Internal Server Error", 500);
+    }
 });
 
-app.get('/greet/:name', (c) => {
-  const name = c.req.param('name');
-  return c.text(`Hello, ${name}!`);
+// Serve the login page
+app.get('/login', async (c) => {
+    try {
+        const html = await Deno.readTextFile('./web/login.html');
+        return c.html(html);
+    } catch (error) {
+        console.error("Error reading login.html:", error);
+        return c.text("Internal Server Error", 500);
+    }
 });
 
-// Serve the app using Deno's serve function
-serve(app.fetch);  // Use app.fetch for compatibility
+// Start listening on port 8000
+serve(app.fetch, { port: 8000 });
+console.log('Server running at http://localhost:8000');
